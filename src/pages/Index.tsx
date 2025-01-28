@@ -4,8 +4,8 @@ import { CitySelect } from "@/components/CitySelect";
 import { PlaceCard } from "@/components/PlaceCard";
 import { PlaceDialog } from "@/components/PlaceDialog";
 import { Category, Place } from "@/types/place";
+import { Input } from "@/components/ui/input";
 
-// Mock data - replace with real API call in production
 const mockPlaces: Place[] = [
   {
     id: "1",
@@ -39,12 +39,16 @@ const mockPlaces: Place[] = [
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
 
   const filteredPlaces = mockPlaces.filter((place) => {
     const matchesCategory = !selectedCategory || place.category === selectedCategory;
     const matchesCity = !selectedCity || place.city === selectedCity;
-    return matchesCategory && matchesCity;
+    const matchesSearch = !searchQuery || 
+      place.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      place.description.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesCity && matchesSearch;
   });
 
   return (
@@ -61,14 +65,21 @@ const Index = () => {
           </div>
 
           <div className="flex flex-col md:flex-row gap-6 mb-12">
-            <div className="md:w-1/4">
+            <div className="md:w-auto">
               <CategoryFilter
                 selectedCategory={selectedCategory}
                 onSelectCategory={setSelectedCategory}
               />
             </div>
-            <div className="md:w-3/4">
-              <div className="flex justify-end mb-6">
+            <div className="flex-1">
+              <div className="flex items-center justify-between gap-4 mb-6">
+                <Input
+                  type="search"
+                  placeholder="Search places..."
+                  className="max-w-md"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
                 <CitySelect selectedCity={selectedCity} onSelectCity={setSelectedCity} />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
