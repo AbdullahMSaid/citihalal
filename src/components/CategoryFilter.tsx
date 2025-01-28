@@ -1,13 +1,13 @@
 import { Category } from "@/types/place";
 import { cn } from "@/lib/utils";
-import { ShoppingBag, Utensils, Coffee } from "lucide-react";
+import { ShoppingBag, Utensils, Coffee, LucideIcon } from "lucide-react";
 
 interface CategoryFilterProps {
   selectedCategory: Category | null;
   onSelectCategory: (category: Category) => void;
 }
 
-const categories: { value: Category; label: string; icon: React.ComponentType }[] = [
+const categories: { value: Category; label: string; icon: LucideIcon }[] = [
   { value: "shop", label: "Shopping", icon: ShoppingBag },
   { value: "food", label: "Restaurants", icon: Utensils },
   { value: "coffee", label: "Cafés", icon: Coffee },
