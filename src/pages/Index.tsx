@@ -5,6 +5,7 @@ import { PlaceCard } from "@/components/PlaceCard";
 import { PlaceDialog } from "@/components/PlaceDialog";
 import { Category, Place } from "@/types/place";
 import { Input } from "@/components/ui/input";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const mockPlaces: Place[] = [
   {
@@ -52,30 +53,35 @@ const Index = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-neutral-50 to-neutral-100/50">
+    <div className="min-h-screen bg-gradient-to-b from-background to-background/50">
       <div className="container py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
+          <div className="flex justify-end mb-6">
+            <ThemeToggle />
+          </div>
+          
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-medium text-neutral-900 mb-4">
+            <h1 className="text-4xl font-medium text-foreground mb-4">
               Discover Your City
             </h1>
-            <p className="text-neutral-600">
+            <p className="text-muted-foreground">
               Find the best places to shop, eat, and drink in your area
             </p>
           </div>
 
           <div className="flex flex-col gap-6">
-            <div className="flex items-center gap-4">
+            <Input
+              type="search"
+              placeholder="Search places..."
+              className="max-w-xl mx-auto"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            
+            <div className="flex items-center justify-between">
               <CategoryFilter
                 selectedCategory={selectedCategory}
                 onSelectCategory={setSelectedCategory}
-              />
-              <Input
-                type="search"
-                placeholder="Search places..."
-                className="flex-1 max-w-md"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
               />
               <CitySelect selectedCity={selectedCity} onSelectCity={setSelectedCity} />
             </div>
@@ -90,7 +96,7 @@ const Index = () => {
               ))}
               {filteredPlaces.length === 0 && (
                 <div className="col-span-full text-center py-12">
-                  <p className="text-neutral-600">
+                  <p className="text-muted-foreground">
                     No places found. Try adjusting your filters.
                   </p>
                 </div>
