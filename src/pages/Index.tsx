@@ -2,6 +2,7 @@ import { useState } from "react";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { CitySelect } from "@/components/CitySelect";
 import { PlaceCard } from "@/components/PlaceCard";
+import { PlaceDialog } from "@/components/PlaceDialog";
 import { Category, Place } from "@/types/place";
 
 // Mock data - replace with real API call in production
@@ -11,7 +12,7 @@ const mockPlaces: Place[] = [
     name: "The Coffee House",
     category: "coffee",
     city: "New York",
-    description: "Artisanal coffee shop with house-roasted beans and fresh pastries.",
+    description: "Artisanal coffee shop with house-roasted beans and fresh pastries. Our expert baristas craft each drink with precision and care, using only the finest locally roasted beans. We also offer a selection of homemade pastries and light breakfast options.",
     rating: 4.8,
     image: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&q=80",
   },
@@ -20,7 +21,7 @@ const mockPlaces: Place[] = [
     name: "Urban Outfitters",
     category: "shop",
     city: "Los Angeles",
-    description: "Trendy clothing store featuring the latest fashion and accessories.",
+    description: "Trendy clothing store featuring the latest fashion and accessories. Browse through our carefully curated collection of contemporary fashion, home decor, and unique gifts. Our store offers a mix of well-known brands and emerging designers.",
     rating: 4.5,
     image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80",
   },
@@ -29,16 +30,16 @@ const mockPlaces: Place[] = [
     name: "Gourmet Kitchen",
     category: "food",
     city: "San Francisco",
-    description: "Fine dining restaurant serving contemporary American cuisine.",
+    description: "Fine dining restaurant serving contemporary American cuisine. Our seasonal menu features locally sourced ingredients prepared with modern techniques. The elegant atmosphere and exceptional service create an unforgettable dining experience.",
     rating: 4.9,
     image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80",
   },
-  // Add more mock data as needed
 ];
 
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
+  const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
 
   const filteredPlaces = mockPlaces.filter((place) => {
     const matchesCategory = !selectedCategory || place.category === selectedCategory;
@@ -49,7 +50,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-neutral-50 to-neutral-100/50">
       <div className="container py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h1 className="text-4xl font-medium text-neutral-900 mb-4">
               Discover Your City
@@ -59,28 +60,42 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-12">
-            <CategoryFilter
-              selectedCategory={selectedCategory}
-              onSelectCategory={setSelectedCategory}
-            />
-            <CitySelect selectedCity={selectedCity} onSelectCity={setSelectedCity} />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredPlaces.map((place) => (
-              <PlaceCard key={place.id} place={place} />
-            ))}
-            {filteredPlaces.length === 0 && (
-              <div className="col-span-full text-center py-12">
-                <p className="text-neutral-600">
-                  No places found. Try adjusting your filters.
-                </p>
+          <div className="flex flex-col md:flex-row gap-6 mb-12">
+            <div className="md:w-1/4">
+              <CategoryFilter
+                selectedCategory={selectedCategory}
+                onSelectCategory={setSelectedCategory}
+              />
+            </div>
+            <div className="md:w-3/4">
+              <div className="flex justify-end mb-6">
+                <CitySelect selectedCity={selectedCity} onSelectCity={setSelectedCity} />
               </div>
-            )}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {filteredPlaces.map((place) => (
+                  <PlaceCard 
+                    key={place.id} 
+                    place={place} 
+                    onClick={() => setSelectedPlace(place)}
+                  />
+                ))}
+                {filteredPlaces.length === 0 && (
+                  <div className="col-span-full text-center py-12">
+                    <p className="text-neutral-600">
+                      No places found. Try adjusting your filters.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>
+      <PlaceDialog
+        place={selectedPlace}
+        open={!!selectedPlace}
+        onOpenChange={(open) => !open && setSelectedPlace(null)}
+      />
     </div>
   );
 };

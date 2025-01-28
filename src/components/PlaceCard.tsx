@@ -3,11 +3,15 @@ import { Star } from "lucide-react";
 
 interface PlaceCardProps {
   place: Place;
+  onClick: () => void;
 }
 
-export function PlaceCard({ place }: PlaceCardProps) {
+export function PlaceCard({ place, onClick }: PlaceCardProps) {
   return (
-    <div className="group relative overflow-hidden rounded-xl bg-white/50 backdrop-blur-sm border border-neutral-200/50 transition-all duration-300 hover:shadow-lg hover:scale-[1.02] animate-scale-in">
+    <div 
+      className="group relative overflow-hidden rounded-xl bg-white/50 backdrop-blur-sm border border-neutral-200/50 transition-all duration-300 hover:shadow-lg hover:scale-[1.02] animate-scale-in cursor-pointer"
+      onClick={onClick}
+    >
       <div className="aspect-[4/3] overflow-hidden">
         <img
           src={place.image}
