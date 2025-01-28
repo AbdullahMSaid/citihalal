@@ -64,40 +64,37 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="flex flex-col md:flex-row gap-6 mb-12">
-            <div className="md:w-auto">
+          <div className="flex flex-col gap-6">
+            <div className="flex items-center gap-4">
               <CategoryFilter
                 selectedCategory={selectedCategory}
                 onSelectCategory={setSelectedCategory}
               />
+              <Input
+                type="search"
+                placeholder="Search places..."
+                className="flex-1 max-w-md"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <CitySelect selectedCity={selectedCity} onSelectCity={setSelectedCity} />
             </div>
-            <div className="flex-1">
-              <div className="flex items-center justify-between gap-4 mb-6">
-                <Input
-                  type="search"
-                  placeholder="Search places..."
-                  className="max-w-md"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {filteredPlaces.map((place) => (
+                <PlaceCard 
+                  key={place.id} 
+                  place={place} 
+                  onClick={() => setSelectedPlace(place)}
                 />
-                <CitySelect selectedCity={selectedCity} onSelectCity={setSelectedCity} />
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {filteredPlaces.map((place) => (
-                  <PlaceCard 
-                    key={place.id} 
-                    place={place} 
-                    onClick={() => setSelectedPlace(place)}
-                  />
-                ))}
-                {filteredPlaces.length === 0 && (
-                  <div className="col-span-full text-center py-12">
-                    <p className="text-neutral-600">
-                      No places found. Try adjusting your filters.
-                    </p>
-                  </div>
-                )}
-              </div>
+              ))}
+              {filteredPlaces.length === 0 && (
+                <div className="col-span-full text-center py-12">
+                  <p className="text-neutral-600">
+                    No places found. Try adjusting your filters.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>

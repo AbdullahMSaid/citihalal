@@ -15,7 +15,7 @@ const categories: { value: Category; label: string; icon: LucideIcon }[] = [
 
 export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryFilterProps) {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex gap-2">
       {categories.map(({ value, label, icon: Icon }) => (
         <button
           key={value}
