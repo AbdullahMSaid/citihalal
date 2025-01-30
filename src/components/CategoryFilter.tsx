@@ -21,7 +21,7 @@ export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryF
           key={value}
           onClick={() => onSelectCategory(value)}
           className={cn(
-            "p-2 rounded-lg transition-all duration-200",
+            "px-6 py-2 rounded-lg transition-all duration-200 flex items-center gap-2",
             "hover:bg-neutral-100 hover:scale-105",
             selectedCategory === value
               ? "bg-neutral-900 text-white shadow-lg scale-105"
@@ -30,6 +30,7 @@ export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryF
           title={label}
         >
           <Icon className="w-5 h-5" />
+          <span>{label}</span>
         </button>
       ))}
     </div>

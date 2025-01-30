@@ -23,8 +23,8 @@ const cities = [
 export function CitySelect({ selectedCity, onSelectCity }: CitySelectProps) {
   return (
     <Select onValueChange={onSelectCity} value={selectedCity || undefined}>
-      <SelectTrigger className="w-[200px] bg-white/50 backdrop-blur-sm">
-        <SelectValue placeholder="Select a city" />
+      <SelectTrigger className="w-full bg-white/50 backdrop-blur-sm">
+        <SelectValue placeholder="City" />
       </SelectTrigger>
       <SelectContent>
         {cities.map((city) => (

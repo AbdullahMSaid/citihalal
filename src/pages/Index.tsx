@@ -6,6 +6,7 @@ import { PlaceDialog } from "@/components/PlaceDialog";
 import { Category, Place } from "@/types/place";
 import { Input } from "@/components/ui/input";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { Header } from "@/components/Header";
 
 const mockPlaces: Place[] = [
   {
@@ -54,6 +55,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-background/50">
+      <Header />
       <div className="container py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="flex justify-end mb-6">
@@ -83,10 +85,12 @@ const Index = () => {
                 selectedCategory={selectedCategory}
                 onSelectCategory={setSelectedCategory}
               />
-              <CitySelect selectedCity={selectedCity} onSelectCity={setSelectedCity} />
+              <div className="w-40">
+                <CitySelect selectedCity={selectedCity} onSelectCity={setSelectedCity} />
+              </div>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredPlaces.map((place) => (
                 <PlaceCard 
                   key={place.id} 
