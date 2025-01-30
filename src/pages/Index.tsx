@@ -59,9 +59,10 @@ const Index = () => {
         <img
           src="https://images.unsplash.com/photo-1500673922987-e212871fec22"
           alt="City lights"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover opacity-90"
+          style={{ backgroundColor: 'rgb(250, 247, 244)' }}
         />
-        <div className="absolute inset-0 bg-black/20" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/10" />
       </div>
       <div className="container py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
@@ -75,13 +76,14 @@ const Index = () => {
           </div>
 
           <div className="flex flex-col gap-6">
-            <Input
-              type="search"
-              placeholder="Search places..."
-              className="max-w-xl mx-auto"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+            <div className="max-w-none">
+              <Input
+                type="search"
+                placeholder="Search places..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
             
             <div className="flex items-center justify-between">
               <CategoryFilter
