@@ -57,8 +57,8 @@ const Index = () => {
       <Header />
       <div className="relative h-48 sm:h-64 overflow-hidden">
         <img
-          src="https://images.unsplash.com/photo-1500673922987-e212871fec22"
-          alt="City lights"
+          src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000"
+          alt="City skyline"
           className="w-full h-full object-cover opacity-90"
           style={{ backgroundColor: 'rgb(250, 247, 244)' }}
         />
