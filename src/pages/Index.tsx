@@ -5,7 +5,6 @@ import { PlaceCard } from "@/components/PlaceCard";
 import { PlaceDialog } from "@/components/PlaceDialog";
 import { Category, Place } from "@/types/place";
 import { Input } from "@/components/ui/input";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import { Header } from "@/components/Header";
 
 const mockPlaces: Place[] = [
@@ -56,12 +55,16 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-background/50">
       <Header />
+      <div className="relative h-48 sm:h-64 overflow-hidden">
+        <img
+          src="https://images.unsplash.com/photo-1500673922987-e212871fec22"
+          alt="City lights"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black/20" />
+      </div>
       <div className="container py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
-          <div className="flex justify-end mb-6">
-            <ThemeToggle />
-          </div>
-          
           <div className="text-center mb-12">
             <h1 className="text-4xl font-medium text-foreground mb-4">
               Discover Your City
@@ -85,7 +88,7 @@ const Index = () => {
                 selectedCategory={selectedCategory}
                 onSelectCategory={setSelectedCategory}
               />
-              <div className="w-40">
+              <div className="w-32 sm:w-40">
                 <CitySelect selectedCity={selectedCity} onSelectCity={setSelectedCity} />
               </div>
             </div>
