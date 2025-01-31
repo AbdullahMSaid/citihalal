@@ -10,30 +10,39 @@ import { Header } from "@/components/Header";
 const mockPlaces: Place[] = [
   {
     id: "1",
-    name: "The Coffee House",
+    name: "The Halal Coffee House",
     category: "coffee",
     city: "New York",
-    description: "Artisanal coffee shop with house-roasted beans and fresh pastries. Our expert baristas craft each drink with precision and care, using only the finest locally roasted beans. We also offer a selection of homemade pastries and light breakfast options.",
+    description: "Artisanal coffee shop with house-roasted beans and fresh pastries. Certified Halal.",
     rating: 4.8,
     image: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&q=80",
+    phone: "+1 (212) 555-0123",
+    website: "https://halalcoffeehouse.com",
+    googleMaps: "https://goo.gl/maps/example1",
   },
   {
     id: "2",
-    name: "Urban Outfitters",
+    name: "Urban Halal Market",
     category: "shop",
     city: "Los Angeles",
-    description: "Trendy clothing store featuring the latest fashion and accessories. Browse through our carefully curated collection of contemporary fashion, home decor, and unique gifts. Our store offers a mix of well-known brands and emerging designers.",
+    description: "Premium Halal grocery store featuring imported goods and fresh meats.",
     rating: 4.5,
     image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80",
+    phone: "+1 (323) 555-0456",
+    website: "https://urbanhalalmarket.com",
+    googleMaps: "https://goo.gl/maps/example2",
   },
   {
     id: "3",
-    name: "Gourmet Kitchen",
+    name: "Gourmet Halal Kitchen",
     category: "food",
     city: "San Francisco",
-    description: "Fine dining restaurant serving contemporary American cuisine. Our seasonal menu features locally sourced ingredients prepared with modern techniques. The elegant atmosphere and exceptional service create an unforgettable dining experience.",
+    description: "Fine dining restaurant serving contemporary Halal cuisine with locally sourced ingredients.",
     rating: 4.9,
     image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80",
+    phone: "+1 (415) 555-0789",
+    website: "https://gourmethalalkit.com",
+    googleMaps: "https://goo.gl/maps/example3",
   },
 ];
 
@@ -68,10 +77,10 @@ const Index = () => {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h1 className="text-4xl font-medium text-foreground mb-4">
-              Discover Your City
+              Discover Your City's Halal Scene
             </h1>
             <p className="text-muted-foreground">
-              Find the best places to shop, eat, and drink in your area
+              Find the best Halal places to shop, eat, and drink in your area
             </p>
           </div>
 

@@ -5,7 +5,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Place } from "@/types/place";
-import { Star } from "lucide-react";
+import { Star, Phone, Globe, MapPin } from "lucide-react";
 
 interface PlaceDialogProps {
   place: Place | null;
@@ -40,6 +40,37 @@ export function PlaceDialog({ place, open, onOpenChange }: PlaceDialogProps) {
             <div>
               <h3 className="font-medium text-neutral-900 mb-1">Location</h3>
               <p className="text-neutral-600">{place.city}</p>
+              <a 
+                href={place.googleMaps}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700 mt-1"
+              >
+                <MapPin className="h-4 w-4" />
+                View on Google Maps
+              </a>
+            </div>
+            <div>
+              <h3 className="font-medium text-neutral-900 mb-1">Contact</h3>
+              <div className="space-y-2">
+                <a 
+                  href={`tel:${place.phone}`}
+                  className="inline-flex items-center gap-2 text-sm text-neutral-600"
+                >
+                  <Phone className="h-4 w-4" />
+                  {place.phone}
+                </a>
+                <br />
+                <a 
+                  href={place.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700"
+                >
+                  <Globe className="h-4 w-4" />
+                  Visit Website
+                </a>
+              </div>
             </div>
             <div>
               <h3 className="font-medium text-neutral-900 mb-1">Description</h3>

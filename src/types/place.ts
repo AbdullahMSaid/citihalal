@@ -8,4 +8,7 @@ export interface Place {
   description: string;
   rating: number;
   image: string;
+  phone: string;
+  website: string;
+  googleMaps: string;
 }
