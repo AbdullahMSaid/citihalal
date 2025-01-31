@@ -1,4 +1,5 @@
 import { Place } from "@/types/place";
+import { Card, CardContent } from "@/components/ui/card";
 import { Star } from "lucide-react";
 
 interface PlaceCardProps {
@@ -8,33 +9,30 @@ interface PlaceCardProps {
 
 export function PlaceCard({ place, onClick }: PlaceCardProps) {
   return (
-    <div 
-      className="group relative overflow-hidden rounded-xl bg-white/50 backdrop-blur-sm border border-neutral-200/50 transition-all duration-300 hover:shadow-lg hover:scale-[1.02] animate-scale-in cursor-pointer"
+    <Card 
+      className="overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
       onClick={onClick}
     >
-      <div className="aspect-[4/3] overflow-hidden">
+      <div className="aspect-[16/9] overflow-hidden">
         <img
-          src={place.image}
+          src={place.images[0]}
           alt={place.name}
-          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-          loading="lazy"
+          className="h-full w-full object-cover"
         />
       </div>
-      <div className="p-4">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h3 className="font-medium text-neutral-900">{place.name}</h3>
-            <p className="text-sm text-neutral-600">{place.city}</p>
-          </div>
+      <CardContent className="p-4">
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="font-medium text-lg">{place.name}</h3>
           <div className="flex items-center gap-1">
             <Star className="h-4 w-4 fill-yellow-400 stroke-yellow-400" />
-            <span className="text-sm font-medium">{place.rating}</span>
+            <span className="text-sm">{place.rating}</span>
           </div>
         </div>
-        <p className="mt-2 text-sm text-neutral-600 line-clamp-2">
+        <p className="text-sm text-muted-foreground mb-2">{place.city}</p>
+        <p className="text-sm text-muted-foreground line-clamp-2">
           {place.description}
         </p>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }
