@@ -6,13 +6,6 @@ import {
 } from "@/components/ui/dialog";
 import { Place } from "@/types/place";
 import { Star, Phone, Globe, MapPin } from "lucide-react";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
 
 interface PlaceDialogProps {
   place: Place | null;
@@ -37,23 +30,11 @@ export function PlaceDialog({ place, open, onOpenChange }: PlaceDialogProps) {
         </DialogHeader>
         <div className="mt-4">
           <div className="aspect-[16/9] overflow-hidden rounded-lg mb-4">
-            <Carousel>
-              <CarouselContent>
-                {place.images.map((image, index) => (
-                  <CarouselItem key={index}>
-                    <div className="aspect-[16/9] overflow-hidden rounded-lg">
-                      <img
-                        src={image}
-                        alt={`${place.name} - Image ${index + 1}`}
-                        className="h-full w-full object-cover"
-                      />
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="left-2" />
-              <CarouselNext className="right-2" />
-            </Carousel>
+            <img
+              src={place.image}
+              alt={place.name}
+              className="h-full w-full object-cover"
+            />
           </div>
           <div className="space-y-4">
             <div>

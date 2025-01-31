@@ -7,7 +7,7 @@ export interface Place {
   city: string;
   description: string;
   rating: number;
-  images: string[];
+  image: string;
   phone: string;
   website: string;
   googleMaps: string;
