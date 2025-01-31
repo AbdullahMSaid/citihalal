@@ -59,8 +59,6 @@ const mockPlaces: Place[] = [
 export default function Index() {
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
-  const [selectedCity, setSelectedCity] = useState<string | null>(null);
 
   const handlePlaceClick = (place: Place) => {
     setSelectedPlace(place);
@@ -69,14 +67,8 @@ export default function Index() {
 
   return (
     <div>
-      <CategoryFilter 
-        selectedCategory={selectedCategory} 
-        onSelectCategory={setSelectedCategory} 
-      />
-      <CitySelect 
-        selectedCity={selectedCity} 
-        onSelectCity={setSelectedCity} 
-      />
+      <CategoryFilter />
+      <CitySelect />
       <div className="grid grid-cols-1 gap-4">
         {mockPlaces.map((place) => (
           <PlaceCard key={place.id} place={place} onClick={() => handlePlaceClick(place)} />
