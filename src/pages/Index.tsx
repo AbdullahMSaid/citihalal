@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Place } from "@/types/place";
+import { Place, Category } from "@/types/place";
 import { PlaceCard } from "@/components/PlaceCard";
 import { PlaceDialog } from "@/components/PlaceDialog";
 import { CategoryFilter } from "@/components/CategoryFilter";
@@ -59,6 +59,8 @@ const mockPlaces: Place[] = [
 export default function Index() {
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+  const [selectedCity, setSelectedCity] = useState<string | null>(null);
 
   const handlePlaceClick = (place: Place) => {
     setSelectedPlace(place);
@@ -67,8 +69,14 @@ export default function Index() {
 
   return (
     <div>
-      <CategoryFilter />
-      <CitySelect />
+      <CategoryFilter 
+        selectedCategory={selectedCategory} 
+        onSelectCategory={setSelectedCategory} 
+      />
+      <CitySelect 
+        selectedCity={selectedCity} 
+        onSelectCity={setSelectedCity} 
+      />
       <div className="grid grid-cols-1 gap-4">
         {mockPlaces.map((place) => (
           <PlaceCard key={place.id} place={place} onClick={() => handlePlaceClick(place)} />
