@@ -16,6 +16,11 @@ const mockPlaces: Place[] = [
     description: "Artisanal coffee shop with house-roasted beans and fresh pastries. Certified Halal.",
     rating: 4.8,
     image: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&q=80"
+    ],
     phone: "+1 (212) 555-0123",
     website: "https://halalcoffeehouse.com",
     googleMaps: "https://goo.gl/maps/example1",
@@ -28,6 +33,11 @@ const mockPlaces: Place[] = [
     description: "Premium Halal grocery store featuring imported goods and fresh meats.",
     rating: 4.5,
     image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1534723452862-4c874018d66d?auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&q=80"
+    ],
     phone: "+1 (323) 555-0456",
     website: "https://urbanhalalmarket.com",
     googleMaps: "https://goo.gl/maps/example2",
@@ -40,6 +50,11 @@ const mockPlaces: Place[] = [
     description: "Fine dining restaurant serving contemporary Halal cuisine with locally sourced ingredients.",
     rating: 4.9,
     image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1424847651672-bf20a4b0982b?auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1515669097368-22e68427d265?auto=format&fit=crop&q=80"
+    ],
     phone: "+1 (415) 555-0789",
     website: "https://gourmethalalkit.com",
     googleMaps: "https://goo.gl/maps/example3",
