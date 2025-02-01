@@ -6,7 +6,6 @@ import { PlaceDialog } from "@/components/PlaceDialog";
 import { Category, Place } from "@/types/place";
 import { Input } from "@/components/ui/input";
 import { Header } from "@/components/Header";
-import { FlickeringGrid } from "@/components/ui/flickering-grid";
 
 const mockPlaces: Place[] = [
   {
@@ -169,23 +168,6 @@ const Index = () => {
                   </p>
                 </div>
               )}
-            </div>
-
-            <div className="mt-16">
-              <div className="text-center mb-8">
-                <h2 className="text-2xl font-medium text-foreground">COMING SOON</h2>
-                <p className="text-muted-foreground mt-2">More features and locations being added daily</p>
-              </div>
-              <div className="h-48 rounded-lg overflow-hidden">
-                <FlickeringGrid
-                  className="w-full h-full"
-                  squareSize={4}
-                  gridGap={6}
-                  color="#6B7280"
-                  maxOpacity={0.5}
-                  flickerChance={0.1}
-                />
-              </div>
             </div>
           </div>
         </div>

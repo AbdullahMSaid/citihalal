@@ -1,7 +1,7 @@
 import { Header } from "@/components/Header";
 import { FlickeringGrid } from "@/components/ui/flickering-grid";
 
-const About = () => {
+const Contact = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-background/50">
       <Header />
@@ -20,21 +20,12 @@ const About = () => {
             flickerChance={0.1}
           />
         </div>
-        <div className="relative h-48 sm:h-64 overflow-hidden">
-          <img
-            src="https://images.unsplash.com/photo-1542838132-92c53300491e"
-            alt="Shopping district"
-            className="w-full h-full object-cover opacity-90"
-            style={{ backgroundColor: 'rgb(250, 247, 244)' }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/10" />
-        </div>
-        <div className="max-w-3xl mx-auto text-center mt-12">
+        <div className="max-w-3xl mx-auto text-center">
           <h1 className="text-4xl font-medium text-foreground mb-6">
-            About CityPick
+            Contact Us
           </h1>
           <p className="text-lg text-muted-foreground leading-relaxed">
-            This is so everyone can find the best halal shopping experience. We're dedicated to helping you discover and explore halal-friendly businesses in your city, making it easier to shop with confidence and peace of mind.
+            Our contact form and support channels will be available soon. Stay tuned for updates!
           </p>
         </div>
       </div>
@@ -42,4 +33,4 @@ const About = () => {
   );
 };
 
-export default About;
+export default Contact;
