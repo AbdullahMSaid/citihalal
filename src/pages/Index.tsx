@@ -6,6 +6,7 @@ import { PlaceDialog } from "@/components/PlaceDialog";
 import { Category, Place } from "@/types/place";
 import { Input } from "@/components/ui/input";
 import { Header } from "@/components/Header";
+import { FlickeringGrid } from "@/components/ui/flickering-grid";
 
 const mockPlaces: Place[] = [
   {
@@ -59,6 +60,40 @@ const mockPlaces: Place[] = [
     website: "https://gourmethalalkit.com",
     googleMaps: "https://goo.gl/maps/example3",
   },
+  {
+    id: "4",
+    name: "Arabian Nights Restaurant",
+    category: "food",
+    city: "Chicago",
+    description: "Authentic Middle Eastern cuisine in an elegant setting with live entertainment.",
+    rating: 4.7,
+    image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1547573854-74d2a71d0826?auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1540914124281-342587941389?auto=format&fit=crop&q=80"
+    ],
+    phone: "+1 (312) 555-1234",
+    website: "https://arabiannightschi.com",
+    googleMaps: "https://goo.gl/maps/example4",
+  },
+  {
+    id: "5",
+    name: "Medina Spice Bazaar",
+    category: "shop",
+    city: "Houston",
+    description: "Traditional spice market offering rare and authentic Middle Eastern ingredients.",
+    rating: 4.6,
+    image: "https://images.unsplash.com/photo-1546552356-3173f7d0c091?auto=format&fit=crop&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1546552356-3173f7d0c091?auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1546552356-3173f7d0c091?auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1546552356-3173f7d0c091?auto=format&fit=crop&q=80"
+    ],
+    phone: "+1 (713) 555-5678",
+    website: "https://medinaspicebazaar.com",
+    googleMaps: "https://goo.gl/maps/example5",
+  }
 ];
 
 const Index = () => {
@@ -134,6 +169,23 @@ const Index = () => {
                   </p>
                 </div>
               )}
+            </div>
+
+            <div className="mt-16">
+              <div className="text-center mb-8">
+                <h2 className="text-2xl font-medium text-foreground">COMING SOON</h2>
+                <p className="text-muted-foreground mt-2">More features and locations being added daily</p>
+              </div>
+              <div className="h-48 rounded-lg overflow-hidden">
+                <FlickeringGrid
+                  className="w-full h-full"
+                  squareSize={4}
+                  gridGap={6}
+                  color="#6B7280"
+                  maxOpacity={0.5}
+                  flickerChance={0.1}
+                />
+              </div>
             </div>
           </div>
         </div>
