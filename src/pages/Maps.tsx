@@ -6,23 +6,19 @@ const Maps = () => {
     <div className="min-h-screen bg-gradient-to-b from-background to-background/50">
       <Header />
       <div className="container py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto relative">
-          <div className="absolute inset-0">
-            <FlickeringGrid 
-              squareSize={4}
-              gridGap={6}
-              flickerChance={0.3}
-              maxOpacity={0.3}
-            />
-          </div>
-          <div className="relative z-10 text-center py-20">
-            <h1 className="text-4xl font-bold tracking-tight sm:text-6xl mb-4">
-              Maps Coming Soon
-            </h1>
-            <p className="text-lg text-muted-foreground">
-              Our interactive maps feature is under development. Stay tuned for updates.
-            </p>
-          </div>
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-medium text-foreground">COMING SOON</h2>
+          <p className="text-muted-foreground mt-2">More features and locations being added daily</p>
+        </div>
+        <div className="h-[600px] rounded-lg overflow-hidden mb-12">
+          <FlickeringGrid
+            className="w-full h-full"
+            squareSize={4}
+            gridGap={6}
+            color="#6B7280"
+            maxOpacity={0.5}
+            flickerChance={0.1}
+          />
         </div>
       </div>
     </div>

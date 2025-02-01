@@ -83,10 +83,10 @@ const mockPlaces: Place[] = [
     city: "Houston",
     description: "Traditional spice market offering rare and authentic Middle Eastern ingredients.",
     rating: 4.6,
-    image: "https://images.unsplash.com/photo-1546552356-3173f7d0c091?auto=format&fit=crop&q=80",
+    image: "https://images.unsplash.com/photo-1466442929976-97f336a657be?auto=format&fit=crop&q=80",
     images: [
-      "https://images.unsplash.com/photo-1546552356-3173f7d0c091?auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1546552356-3173f7d0c091?auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1466442929976-97f336a657be?auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1546552356-3173f7d0c091?auto=format&fit=crop&q=80"
     ],
     phone: "+1 (713) 555-5678",
