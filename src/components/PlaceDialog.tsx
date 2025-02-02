@@ -5,7 +5,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Place } from "@/types/place";
-import { Star, Phone, Globe, MapPin, ChevronLeft, ChevronRight } from "lucide-react";
+import { Phone, Globe, MapPin, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 
 interface PlaceDialogProps {
@@ -37,9 +37,8 @@ export function PlaceDialog({ place, open, onOpenChange }: PlaceDialogProps) {
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold flex items-center justify-between">
             {place.name}
-            <div className="flex items-center gap-1">
-              <Star className="h-5 w-5 fill-yellow-400 stroke-yellow-400" />
-              <span className="text-base">{place.rating}</span>
+            <div className="px-2 py-1 bg-neutral-100 rounded-full">
+              <span className="text-sm font-medium text-neutral-600">{place.culture}</span>
             </div>
           </DialogTitle>
         </DialogHeader>
