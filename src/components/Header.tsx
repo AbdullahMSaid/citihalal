@@ -7,7 +7,7 @@ export function Header() {
         <div className="flex items-center justify-between h-16">
           <div className="flex-1">
             <Link to="/" className="text-lg font-medium text-foreground">
-              CityPick
+              CityHalal
             </Link>
           </div>
           <nav className="flex items-center gap-6">

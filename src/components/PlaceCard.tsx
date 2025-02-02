@@ -25,8 +25,8 @@ export function PlaceCard({ place, onClick }: PlaceCardProps) {
             <h3 className="font-medium text-neutral-900">{place.name}</h3>
             <p className="text-sm text-neutral-600">{place.city}</p>
           </div>
-          <div className="px-2 py-1 bg-neutral-100 rounded-full">
-            <span className="text-sm font-medium text-neutral-600">{place.culture}</span>
+          <div className="px-2 py-1 bg-blue-50 rounded-full">
+            <span className="text-sm font-medium text-blue-600">{place.culture}</span>
           </div>
         </div>
         <p className="mt-2 text-sm text-neutral-600 line-clamp-2">

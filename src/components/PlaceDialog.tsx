@@ -19,103 +19,72 @@ export function PlaceDialog({ place, open, onOpenChange }: PlaceDialogProps) {
 
   if (!place) return null;
 
-  const nextImage = () => {
-    setCurrentImageIndex((prev) => 
-      prev === place.images.length - 1 ? 0 : prev + 1
-    );
+  const handlePrevImage = () => {
+    setCurrentImageIndex((prev) => (prev === 0 ? place.images.length - 1 : prev - 1));
   };
 
-  const previousImage = () => {
-    setCurrentImageIndex((prev) => 
-      prev === 0 ? place.images.length - 1 : prev - 1
-    );
+  const handleNextImage = () => {
+    setCurrentImageIndex((prev) => (prev === place.images.length - 1 ? 0 : prev + 1));
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="max-w-2xl">
+        <div className="relative">
+          <img
+            src={place.images[currentImageIndex]}
+            alt={place.name}
+            className="w-full aspect-video object-cover rounded-t-lg"
+          />
+          <button
+            onClick={handlePrevImage}
+            className="absolute left-2 top-1/2 -translate-y-1/2 p-1 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
+          >
+            <ChevronLeft className="h-6 w-6" />
+          </button>
+          <button
+            onClick={handleNextImage}
+            className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
+          >
+            <ChevronRight className="h-6 w-6" />
+          </button>
+        </div>
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold flex items-center justify-between">
             {place.name}
-            <div className="px-2 py-1 bg-neutral-100 rounded-full">
-              <span className="text-sm font-medium text-neutral-600">{place.culture}</span>
+            <div className="px-2 py-1 bg-blue-50 rounded-full">
+              <span className="text-sm font-medium text-blue-600">{place.culture}</span>
             </div>
           </DialogTitle>
         </DialogHeader>
-        <div className="mt-4">
-          <div className="relative aspect-[16/9] overflow-hidden rounded-lg mb-4 group">
-            <img
-              src={place.images[currentImageIndex]}
-              alt={`${place.name} - Image ${currentImageIndex + 1}`}
-              className="h-full w-full object-cover transition-transform duration-300"
-            />
-            {place.images.length > 1 && (
-              <>
-                <button
-                  onClick={previousImage}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  <ChevronLeft className="h-6 w-6" />
-                </button>
-                <button
-                  onClick={nextImage}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  <ChevronRight className="h-6 w-6" />
-                </button>
-                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
-                  {place.images.map((_, index) => (
-                    <div
-                      key={index}
-                      className={`h-1.5 w-1.5 rounded-full transition-colors ${
-                        index === currentImageIndex ? "bg-white" : "bg-white/50"
-                      }`}
-                    />
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
-          <div className="space-y-4">
-            <div>
-              <h3 className="font-medium text-neutral-900 mb-1">Location</h3>
-              <p className="text-neutral-600">{place.city}</p>
-              <a 
-                href={place.googleMaps}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700 mt-1"
-              >
-                <MapPin className="h-4 w-4" />
-                View on Google Maps
-              </a>
-            </div>
-            <div>
-              <h3 className="font-medium text-neutral-900 mb-1">Contact</h3>
-              <div className="space-y-2">
-                <a 
-                  href={`tel:${place.phone}`}
-                  className="inline-flex items-center gap-2 text-sm text-neutral-600"
-                >
-                  <Phone className="h-4 w-4" />
-                  {place.phone}
-                </a>
-                <br />
-                <a 
-                  href={place.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700"
-                >
-                  <Globe className="h-4 w-4" />
-                  Visit Website
-                </a>
-              </div>
-            </div>
-            <div>
-              <h3 className="font-medium text-neutral-900 mb-1">Description</h3>
-              <p className="text-neutral-600">{place.description}</p>
-            </div>
+        <div className="space-y-4">
+          <p className="text-muted-foreground">{place.description}</p>
+          <div className="space-y-2">
+            <a
+              href={`tel:${place.phone}`}
+              className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <Phone className="h-4 w-4" />
+              {place.phone}
+            </a>
+            <a
+              href={place.website}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <Globe className="h-4 w-4" />
+              {place.website}
+            </a>
+            <a
+              href={place.googleMaps}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <MapPin className="h-4 w-4" />
+              View on Google Maps
+            </a>
           </div>
         </div>
       </DialogContent>
