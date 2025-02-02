@@ -23,7 +23,7 @@ const mockPlaces: Place[] = [
     ],
     phone: "+1 (212) 555-0123",
     website: "https://halalcoffeehouse.com",
-    googleMaps: "https://goo.gl/maps/example1",
+    googleMaps: "https://maps.app.goo.gl/Da1nX4DHwxu7K9Aw6",
   },
   {
     id: "2",
