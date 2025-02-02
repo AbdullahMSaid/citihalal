@@ -6,7 +6,7 @@ export interface Place {
   category: Category;
   city: string;
   description: string;
-  rating: number;
+  culture: string;
   image: string;
   images: string[];
   phone: string;

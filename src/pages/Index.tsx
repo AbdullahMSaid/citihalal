@@ -14,7 +14,7 @@ const mockPlaces: Place[] = [
     category: "coffee",
     city: "New York",
     description: "Artisanal coffee shop with house-roasted beans and fresh pastries. Certified Halal.",
-    rating: 4.8,
+    culture: "Turkish",
     image: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&q=80",
     images: [
       "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&q=80",
@@ -31,7 +31,7 @@ const mockPlaces: Place[] = [
     category: "shop",
     city: "Los Angeles",
     description: "Premium Halal grocery store featuring imported goods and fresh meats.",
-    rating: 4.5,
+    culture: "Lebanese",
     image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80",
     images: [
       "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80",
@@ -48,7 +48,7 @@ const mockPlaces: Place[] = [
     category: "food",
     city: "San Francisco",
     description: "Fine dining restaurant serving contemporary Halal cuisine with locally sourced ingredients.",
-    rating: 4.9,
+    culture: "Persian",
     image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80",
     images: [
       "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80",
@@ -65,7 +65,7 @@ const mockPlaces: Place[] = [
     category: "food",
     city: "Chicago",
     description: "Authentic Middle Eastern cuisine in an elegant setting with live entertainment.",
-    rating: 4.7,
+    culture: "Yemeni",
     image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80",
     images: [
       "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80",
@@ -82,7 +82,7 @@ const mockPlaces: Place[] = [
     category: "shop",
     city: "Houston",
     description: "Traditional spice market offering rare and authentic Middle Eastern ingredients.",
-    rating: 4.6,
+    culture: "Moroccan",
     image: "https://images.unsplash.com/photo-1466442929976-97f336a657be?auto=format&fit=crop&q=80",
     images: [
       "https://images.unsplash.com/photo-1466442929976-97f336a657be?auto=format&fit=crop&q=80",

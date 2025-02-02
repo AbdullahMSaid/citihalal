@@ -1,5 +1,4 @@
 import { Place } from "@/types/place";
-import { Star } from "lucide-react";
 
 interface PlaceCardProps {
   place: Place;
@@ -26,9 +25,8 @@ export function PlaceCard({ place, onClick }: PlaceCardProps) {
             <h3 className="font-medium text-neutral-900">{place.name}</h3>
             <p className="text-sm text-neutral-600">{place.city}</p>
           </div>
-          <div className="flex items-center gap-1">
-            <Star className="h-4 w-4 fill-yellow-400 stroke-yellow-400" />
-            <span className="text-sm font-medium">{place.rating}</span>
+          <div className="px-2 py-1 bg-neutral-100 rounded-full">
+            <span className="text-sm font-medium text-neutral-600">{place.culture}</span>
           </div>
         </div>
         <p className="mt-2 text-sm text-neutral-600 line-clamp-2">
