@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
+import { AuroraBackgroundDemo } from "@/components/ui/code.demo";
 
 const fetchPlacesFromAirtable = async () => {
   // Get Airtable credentials from localStorage
@@ -158,6 +159,7 @@ const Test = () => {
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
+  const [showAuroraDemo, setShowAuroraDemo] = useState(false);
   
   // Airtable settings state
   const [showSettings, setShowSettings] = useState(false);
@@ -225,6 +227,26 @@ const Test = () => {
       place.description.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesCity && matchesSearch;
   });
+  
+  // Toggle Aurora demo display
+  const toggleAuroraDemo = () => {
+    setShowAuroraDemo(!showAuroraDemo);
+  };
+
+  // If Aurora demo is shown, render only that
+  if (showAuroraDemo) {
+    return (
+      <>
+        <AuroraBackgroundDemo />
+        <Button 
+          onClick={toggleAuroraDemo}
+          className="fixed z-50 top-4 right-4 bg-black/70 hover:bg-black text-white"
+        >
+          Back to Test Page
+        </Button>
+      </>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-background/50">
@@ -247,6 +269,14 @@ const Test = () => {
             <p className="text-muted-foreground mb-6">
               Find the best Halal places to shop, eat, and drink in your area - Test Version
             </p>
+            
+            {/* Aurora Demo Button */}
+            <Button 
+              onClick={toggleAuroraDemo} 
+              className="mb-4 mx-auto bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white animate-pulse hover:animate-none"
+            >
+              Show Aurora Background Demo
+            </Button>
             
             <div className="flex flex-col items-center justify-center mb-6">
               <Button 

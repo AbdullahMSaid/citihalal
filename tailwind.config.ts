@@ -1,4 +1,37 @@
+
 import type { Config } from "tailwindcss";
+
+const flattenColorPalette = (colors: Record<string, any>) => {
+  const result: Record<string, string> = {};
+
+  const flattenColors = (colorObj: Record<string, any>, parentKey = '') => {
+    for (const key in colorObj) {
+      const value = colorObj[key];
+      const newKey = parentKey ? `${parentKey}-${key}` : key;
+      
+      if (typeof value === 'string') {
+        result[newKey] = value;
+      } else {
+        flattenColors(value, newKey);
+      }
+    }
+  };
+
+  flattenColors(colors);
+  return result;
+};
+
+// Function to add color variables
+function addVariablesForColors({ addBase, theme }: any) {
+  let allColors = flattenColorPalette(theme("colors"));
+  let newVars = Object.fromEntries(
+    Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
+  );
+
+  addBase({
+    ":root": newVars,
+  });
+}
 
 export default {
   darkMode: ["class"],
@@ -82,14 +115,23 @@ export default {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" },
         },
+        "aurora": {
+          from: {
+            backgroundPosition: "50% 50%, 50% 50%",
+          },
+          to: {
+            backgroundPosition: "350% 50%, 350% 50%",
+          },
+        },
       },
       animation: {
         "accordion-down": 'accordion-down 0.2s ease-out',
         "accordion-up": 'accordion-up 0.2s ease-out',
         "scale-in": "scale-in 0.2s ease-out",
         "fade-in": "fade-in 0.3s ease-out",
+        "aurora": "aurora 60s linear infinite",
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), addVariablesForColors],
 } satisfies Config;
