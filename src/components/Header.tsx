@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 
 export function Header() {
@@ -19,6 +20,9 @@ export function Header() {
             </Link>
             <Link to="/contact" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
               Contact
+            </Link>
+            <Link to="/test" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              Test
             </Link>
           </nav>
         </div>
