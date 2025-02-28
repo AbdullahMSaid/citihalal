@@ -228,9 +228,16 @@ const Test = () => {
   });
 
   return (
-    <AuroraBackground>
-      <div className="min-h-screen w-full">
-        <Header />
+    <div className="min-h-screen w-full">
+      <Header />
+      <div className="w-full">
+        <img 
+          src="/lovable-uploads/2fcaf658-2ecb-406a-b033-f7d0befb75a6.png" 
+          alt="Chicago Skyline" 
+          className="w-full h-[300px] object-cover"
+        />
+      </div>
+      <AuroraBackground>
         <div className="container py-12 px-4 sm:px-6 lg:px-8">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
@@ -370,8 +377,8 @@ const Test = () => {
           open={!!selectedPlace}
           onOpenChange={(open) => !open && setSelectedPlace(null)}
         />
-      </div>
-    </AuroraBackground>
+      </AuroraBackground>
+    </div>
   );
 };
 
