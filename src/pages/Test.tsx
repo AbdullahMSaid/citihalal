@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
-import { AuroraBackgroundDemo } from "@/components/ui/code.demo";
+import { AuroraBackground } from "@/components/ui/aurora-background";
 
 const fetchPlacesFromAirtable = async () => {
   // Get Airtable credentials from localStorage
@@ -159,7 +159,6 @@ const Test = () => {
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
-  const [showAuroraDemo, setShowAuroraDemo] = useState(false);
   
   // Airtable settings state
   const [showSettings, setShowSettings] = useState(false);
@@ -227,186 +226,152 @@ const Test = () => {
       place.description.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesCity && matchesSearch;
   });
-  
-  // Toggle Aurora demo display
-  const toggleAuroraDemo = () => {
-    setShowAuroraDemo(!showAuroraDemo);
-  };
-
-  // If Aurora demo is shown, render only that
-  if (showAuroraDemo) {
-    return (
-      <>
-        <AuroraBackgroundDemo />
-        <Button 
-          onClick={toggleAuroraDemo}
-          className="fixed z-50 top-4 right-4 bg-black/70 hover:bg-black text-white"
-        >
-          Back to Test Page
-        </Button>
-      </>
-    );
-  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-background/50">
-      <Header />
-      <div className="relative h-48 sm:h-64 overflow-hidden">
-        <img
-          src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&q=80"
-          alt="City skyline"
-          className="w-full h-full object-cover opacity-90"
-          style={{ backgroundColor: 'rgb(250, 247, 244)' }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/10" />
-      </div>
-      <div className="container py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-medium text-foreground mb-4">
-              Test Page - Halal Scene
-            </h1>
-            <p className="text-muted-foreground mb-6">
-              Find the best Halal places to shop, eat, and drink in your area - Test Version
-            </p>
-            
-            {/* Aurora Demo Button */}
-            <Button 
-              onClick={toggleAuroraDemo} 
-              className="mb-4 mx-auto bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white animate-pulse hover:animate-none"
-            >
-              Show Aurora Background Demo
-            </Button>
-            
-            <div className="flex flex-col items-center justify-center mb-6">
-              <Button 
-                onClick={() => setShowSettings(!showSettings)}
-                variant="outline"
-                className="mb-2"
-              >
-                {showSettings ? 'Hide' : 'Configure'} Airtable Connection
-              </Button>
+    <AuroraBackground>
+      <div className="min-h-screen w-full">
+        <Header />
+        <div className="container py-12 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <h1 className="text-4xl font-medium text-foreground mb-4">
+                Test Page - Halal Scene
+              </h1>
+              <p className="text-muted-foreground mb-6">
+                Find the best Halal places to shop, eat, and drink in your area - Test Version
+              </p>
               
-              {hasAirtableCredentials && (
-                <div className="text-sm text-muted-foreground">
-                  {isLoading ? (
-                    "Loading data from Airtable..."
-                  ) : isError ? (
-                    <span className="text-red-500">
-                      Error connecting to Airtable. Check settings.
-                    </span>
-                  ) : airtablePlaces.length > 0 ? (
-                    `Successfully loaded ${airtablePlaces.length} places from Airtable`
-                  ) : (
-                    "Using mock data (no records found in Airtable)"
+              <div className="flex flex-col items-center justify-center mb-6">
+                <Button 
+                  onClick={() => setShowSettings(!showSettings)}
+                  variant="outline"
+                  className="mb-2"
+                >
+                  {showSettings ? 'Hide' : 'Configure'} Airtable Connection
+                </Button>
+                
+                {hasAirtableCredentials && (
+                  <div className="text-sm text-muted-foreground">
+                    {isLoading ? (
+                      "Loading data from Airtable..."
+                    ) : isError ? (
+                      <span className="text-red-500">
+                        Error connecting to Airtable. Check settings.
+                      </span>
+                    ) : airtablePlaces.length > 0 ? (
+                      `Successfully loaded ${airtablePlaces.length} places from Airtable`
+                    ) : (
+                      "Using mock data (no records found in Airtable)"
+                    )}
+                  </div>
+                )}
+              </div>
+              
+              {showSettings && (
+                <Card className="p-6 mb-8 max-w-md mx-auto">
+                  <h3 className="text-lg font-medium mb-4">Airtable Connection Settings</h3>
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="apiKey">API Key</Label>
+                      <Input
+                        id="apiKey"
+                        type="password"
+                        placeholder="Enter Airtable API Key"
+                        value={apiKey}
+                        onChange={(e) => setApiKey(e.target.value)}
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="baseId">Base ID</Label>
+                      <Input
+                        id="baseId"
+                        placeholder="Enter Airtable Base ID"
+                        value={baseId}
+                        onChange={(e) => setBaseId(e.target.value)}
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Found in your Airtable URL: airtable.com/{baseId ? baseId : 'appXXXXXXXXXXXXXX'}
+                      </p>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="tableName">Table Name</Label>
+                      <Input
+                        id="tableName"
+                        placeholder="Enter Airtable Table Name"
+                        value={tableName}
+                        onChange={(e) => setTableName(e.target.value)}
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Usually the name of your table (e.g., "Places")
+                      </p>
+                    </div>
+                    
+                    <Button 
+                      onClick={saveSettings}
+                      className="w-full"
+                    >
+                      Save Settings
+                    </Button>
+                  </div>
+                </Card>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-6 backdrop-blur-sm bg-white/30 dark:bg-black/30 p-6 rounded-lg">
+              <div className="max-w-none">
+                <Input
+                  type="search"
+                  placeholder="Search places..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="bg-white/70 dark:bg-black/70"
+                />
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <CategoryFilter
+                  selectedCategory={selectedCategory}
+                  onSelectCategory={setSelectedCategory}
+                />
+                <div className="w-32 sm:w-40">
+                  <CitySelect selectedCity={selectedCity} onSelectCity={setSelectedCity} />
+                </div>
+              </div>
+              
+              {isLoading ? (
+                <div className="col-span-full text-center py-12">
+                  <p className="text-muted-foreground">Loading places from Airtable...</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredPlaces.map((place) => (
+                    <PlaceCard 
+                      key={place.id} 
+                      place={place} 
+                      onClick={() => setSelectedPlace(place)}
+                    />
+                  ))}
+                  {filteredPlaces.length === 0 && (
+                    <div className="col-span-full text-center py-12">
+                      <p className="text-muted-foreground">
+                        No places found. Try adjusting your filters.
+                      </p>
+                    </div>
                   )}
                 </div>
               )}
             </div>
-            
-            {showSettings && (
-              <Card className="p-6 mb-8 max-w-md mx-auto">
-                <h3 className="text-lg font-medium mb-4">Airtable Connection Settings</h3>
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="apiKey">API Key</Label>
-                    <Input
-                      id="apiKey"
-                      type="password"
-                      placeholder="Enter Airtable API Key"
-                      value={apiKey}
-                      onChange={(e) => setApiKey(e.target.value)}
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="baseId">Base ID</Label>
-                    <Input
-                      id="baseId"
-                      placeholder="Enter Airtable Base ID"
-                      value={baseId}
-                      onChange={(e) => setBaseId(e.target.value)}
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      Found in your Airtable URL: airtable.com/{baseId ? baseId : 'appXXXXXXXXXXXXXX'}
-                    </p>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="tableName">Table Name</Label>
-                    <Input
-                      id="tableName"
-                      placeholder="Enter Airtable Table Name"
-                      value={tableName}
-                      onChange={(e) => setTableName(e.target.value)}
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      Usually the name of your table (e.g., "Places")
-                    </p>
-                  </div>
-                  
-                  <Button 
-                    onClick={saveSettings}
-                    className="w-full"
-                  >
-                    Save Settings
-                  </Button>
-                </div>
-              </Card>
-            )}
-          </div>
-
-          <div className="flex flex-col gap-6">
-            <div className="max-w-none">
-              <Input
-                type="search"
-                placeholder="Search places..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-            
-            <div className="flex items-center justify-between">
-              <CategoryFilter
-                selectedCategory={selectedCategory}
-                onSelectCategory={setSelectedCategory}
-              />
-              <div className="w-32 sm:w-40">
-                <CitySelect selectedCity={selectedCity} onSelectCity={setSelectedCity} />
-              </div>
-            </div>
-            
-            {isLoading ? (
-              <div className="col-span-full text-center py-12">
-                <p className="text-muted-foreground">Loading places from Airtable...</p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredPlaces.map((place) => (
-                  <PlaceCard 
-                    key={place.id} 
-                    place={place} 
-                    onClick={() => setSelectedPlace(place)}
-                  />
-                ))}
-                {filteredPlaces.length === 0 && (
-                  <div className="col-span-full text-center py-12">
-                    <p className="text-muted-foreground">
-                      No places found. Try adjusting your filters.
-                    </p>
-                  </div>
-                )}
-              </div>
-            )}
           </div>
         </div>
+        <PlaceDialog
+          place={selectedPlace}
+          open={!!selectedPlace}
+          onOpenChange={(open) => !open && setSelectedPlace(null)}
+        />
       </div>
-      <PlaceDialog
-        place={selectedPlace}
-        open={!!selectedPlace}
-        onOpenChange={(open) => !open && setSelectedPlace(null)}
-      />
-    </div>
+    </AuroraBackground>
   );
 };
 
