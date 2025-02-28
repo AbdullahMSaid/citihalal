@@ -7,7 +7,64 @@ import { PlaceDialog } from "@/components/PlaceDialog";
 import { Category, Place } from "@/types/place";
 import { Input } from "@/components/ui/input";
 import { Header } from "@/components/Header";
+import { useQuery } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/components/ui/use-toast";
 
+const fetchPlacesFromAirtable = async () => {
+  // Get Airtable credentials from localStorage
+  const apiKey = localStorage.getItem('AIRTABLE_API_KEY');
+  const baseId = localStorage.getItem('AIRTABLE_BASE_ID');
+  const tableName = localStorage.getItem('AIRTABLE_TABLE_NAME');
+
+  if (!apiKey || !baseId || !tableName) {
+    console.error("Airtable credentials missing");
+    return [];
+  }
+
+  try {
+    const response = await fetch(
+      `https://api.airtable.com/v0/${baseId}/${tableName}`,
+      {
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Airtable API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    
+    // Transform Airtable data to match our Place type
+    return data.records.map((record: any) => {
+      const fields = record.fields;
+      return {
+        id: record.id,
+        name: fields.name || "Unnamed Place",
+        category: (fields.category as Category) || "food",
+        city: fields.city || "Unknown",
+        description: fields.description || "",
+        culture: fields.culture || "",
+        image: fields.image?.[0]?.url || "https://placehold.co/600x400",
+        images: fields.images?.map((img: any) => img.url) || [fields.image?.[0]?.url || "https://placehold.co/600x400"],
+        phone: fields.phone || "",
+        website: fields.website || "#",
+        googleMaps: fields.googleMaps || "#"
+      };
+    });
+  } catch (error) {
+    console.error("Error fetching from Airtable:", error);
+    throw error;
+  }
+};
+
+// Fallback mock data in case Airtable fetch fails
 const mockPlaces: Place[] = [
   {
     id: "1",
@@ -101,8 +158,66 @@ const Test = () => {
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
+  
+  // Airtable settings state
+  const [showSettings, setShowSettings] = useState(false);
+  const [apiKey, setApiKey] = useState(localStorage.getItem('AIRTABLE_API_KEY') || "");
+  const [baseId, setBaseId] = useState(localStorage.getItem('AIRTABLE_BASE_ID') || "");
+  const [tableName, setTableName] = useState(localStorage.getItem('AIRTABLE_TABLE_NAME') || "");
+  
+  const { toast } = useToast();
 
-  const filteredPlaces = mockPlaces.filter((place) => {
+  // Check if Airtable credentials are set
+  const hasAirtableCredentials = !!(
+    localStorage.getItem('AIRTABLE_API_KEY') && 
+    localStorage.getItem('AIRTABLE_BASE_ID') && 
+    localStorage.getItem('AIRTABLE_TABLE_NAME')
+  );
+
+  // Fetch places from Airtable
+  const { 
+    data: airtablePlaces = [], 
+    isLoading, 
+    isError, 
+    error 
+  } = useQuery({
+    queryKey: ['airtablePlaces'],
+    queryFn: fetchPlacesFromAirtable,
+    enabled: hasAirtableCredentials,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+
+  // Use Airtable data if available, otherwise use mock data
+  const places = hasAirtableCredentials && !isError && airtablePlaces.length > 0 
+    ? airtablePlaces 
+    : mockPlaces;
+
+  // Save Airtable settings
+  const saveSettings = () => {
+    if (!apiKey || !baseId || !tableName) {
+      toast({
+        title: "Error",
+        description: "Please fill in all fields",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    localStorage.setItem('AIRTABLE_API_KEY', apiKey);
+    localStorage.setItem('AIRTABLE_BASE_ID', baseId);
+    localStorage.setItem('AIRTABLE_TABLE_NAME', tableName);
+    
+    toast({
+      title: "Success",
+      description: "Airtable settings saved. Refreshing data...",
+    });
+    
+    setShowSettings(false);
+    window.location.reload(); // Reload to apply new settings
+  };
+
+  // Filter places based on category, city, and search query
+  const filteredPlaces = places.filter((place) => {
     const matchesCategory = !selectedCategory || place.category === selectedCategory;
     const matchesCity = !selectedCity || place.city === selectedCity;
     const matchesSearch = !searchQuery || 
@@ -129,9 +244,86 @@ const Test = () => {
             <h1 className="text-4xl font-medium text-foreground mb-4">
               Test Page - Halal Scene
             </h1>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground mb-6">
               Find the best Halal places to shop, eat, and drink in your area - Test Version
             </p>
+            
+            <div className="flex flex-col items-center justify-center mb-6">
+              <Button 
+                onClick={() => setShowSettings(!showSettings)}
+                variant="outline"
+                className="mb-2"
+              >
+                {showSettings ? 'Hide' : 'Configure'} Airtable Connection
+              </Button>
+              
+              {hasAirtableCredentials && (
+                <div className="text-sm text-muted-foreground">
+                  {isLoading ? (
+                    "Loading data from Airtable..."
+                  ) : isError ? (
+                    <span className="text-red-500">
+                      Error connecting to Airtable. Check settings.
+                    </span>
+                  ) : airtablePlaces.length > 0 ? (
+                    `Successfully loaded ${airtablePlaces.length} places from Airtable`
+                  ) : (
+                    "Using mock data (no records found in Airtable)"
+                  )}
+                </div>
+              )}
+            </div>
+            
+            {showSettings && (
+              <Card className="p-6 mb-8 max-w-md mx-auto">
+                <h3 className="text-lg font-medium mb-4">Airtable Connection Settings</h3>
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="apiKey">API Key</Label>
+                    <Input
+                      id="apiKey"
+                      type="password"
+                      placeholder="Enter Airtable API Key"
+                      value={apiKey}
+                      onChange={(e) => setApiKey(e.target.value)}
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="baseId">Base ID</Label>
+                    <Input
+                      id="baseId"
+                      placeholder="Enter Airtable Base ID"
+                      value={baseId}
+                      onChange={(e) => setBaseId(e.target.value)}
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Found in your Airtable URL: airtable.com/{baseId ? baseId : 'appXXXXXXXXXXXXXX'}
+                    </p>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="tableName">Table Name</Label>
+                    <Input
+                      id="tableName"
+                      placeholder="Enter Airtable Table Name"
+                      value={tableName}
+                      onChange={(e) => setTableName(e.target.value)}
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Usually the name of your table (e.g., "Places")
+                    </p>
+                  </div>
+                  
+                  <Button 
+                    onClick={saveSettings}
+                    className="w-full"
+                  >
+                    Save Settings
+                  </Button>
+                </div>
+              </Card>
+            )}
           </div>
 
           <div className="flex flex-col gap-6">
@@ -154,22 +346,28 @@ const Test = () => {
               </div>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredPlaces.map((place) => (
-                <PlaceCard 
-                  key={place.id} 
-                  place={place} 
-                  onClick={() => setSelectedPlace(place)}
-                />
-              ))}
-              {filteredPlaces.length === 0 && (
-                <div className="col-span-full text-center py-12">
-                  <p className="text-muted-foreground">
-                    No places found. Try adjusting your filters.
-                  </p>
-                </div>
-              )}
-            </div>
+            {isLoading ? (
+              <div className="col-span-full text-center py-12">
+                <p className="text-muted-foreground">Loading places from Airtable...</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredPlaces.map((place) => (
+                  <PlaceCard 
+                    key={place.id} 
+                    place={place} 
+                    onClick={() => setSelectedPlace(place)}
+                  />
+                ))}
+                {filteredPlaces.length === 0 && (
+                  <div className="col-span-full text-center py-12">
+                    <p className="text-muted-foreground">
+                      No places found. Try adjusting your filters.
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
