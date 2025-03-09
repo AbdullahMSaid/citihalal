@@ -163,10 +163,15 @@ const Test = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
   
-  // This app uses env variables, no need to show settings in UI
-  const [showApiInfo, setShowApiInfo] = useState(false);
+  // Always show API info by default so the user can verify the configuration
+  const [showApiInfo, setShowApiInfo] = useState(true);
   
   const { toast } = useToast();
+
+  // Get environment variables for display
+  const envApiKey = import.meta.env.VITE_AIRTABLE_API_KEY;
+  const envBaseId = import.meta.env.VITE_AIRTABLE_BASE_ID;
+  const envTableName = import.meta.env.VITE_AIRTABLE_TABLE_NAME;
 
   // Fetch places from Airtable
   const { 
@@ -177,11 +182,10 @@ const Test = () => {
   } = useQuery({
     queryKey: ['airtablePlaces'],
     queryFn: fetchPlacesFromAirtable,
-    // Always enable the query, no need to conditionally enable it
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
-  // We'll use toast to show errors if Airtable fetch fails
+  // Show error toast if Airtable fetch fails
   if (isError && error) {
     console.error("Error in useQuery:", error);
     toast({
@@ -193,9 +197,9 @@ const Test = () => {
 
   // Log to help with debugging
   console.log("Environment variables:", {
-    apiKey: import.meta.env.VITE_AIRTABLE_API_KEY ? "Set (hidden)" : "Not set",
-    baseId: import.meta.env.VITE_AIRTABLE_BASE_ID,
-    tableName: import.meta.env.VITE_AIRTABLE_TABLE_NAME
+    apiKey: envApiKey ? "Set (hidden)" : "Not set",
+    baseId: envBaseId,
+    tableName: envTableName
   });
   
   console.log("Query state:", { isLoading, isError, placesCount: places.length });
@@ -235,40 +239,74 @@ const Test = () => {
               Find the best Halal places to shop, eat, and drink in your area - Test Version
             </p>
             
+            {/* API Connection Status Banner */}
+            <Card className="p-6 mb-8 mx-auto max-w-3xl bg-muted/30 border-muted">
+              <h3 className="text-lg font-medium mb-4">Airtable Configuration from .env File</h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
+                <div className="space-y-2">
+                  <Label className="font-bold">API Key:</Label>
+                  <div className="text-sm break-all bg-background p-2 rounded">
+                    {envApiKey ? 
+                      (envApiKey.substring(0, 10) + "..." + envApiKey.substring(envApiKey.length - 10)) : 
+                      "Not set in .env"}
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label className="font-bold">Base ID:</Label>
+                  <div className="text-sm break-all bg-background p-2 rounded">
+                    {envBaseId || "Not set in .env"}
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label className="font-bold">Table Name:</Label>
+                  <div className="text-sm break-all bg-background p-2 rounded">
+                    {envTableName || "Not set in .env"}
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-4 text-sm text-muted-foreground">
+                {isLoading ? (
+                  "Loading data from Airtable..."
+                ) : isError ? (
+                  <span className="text-red-500">
+                    Error connecting to Airtable. Check the console for detailed error message.
+                  </span>
+                ) : places.length > 0 ? (
+                  <span className="text-green-600 font-medium">
+                    Successfully loaded {places.length} places from Airtable
+                  </span>
+                ) : (
+                  <span className="text-amber-600">
+                    No records found in Airtable table. Using mock data instead.
+                  </span>
+                )}
+              </div>
+            </Card>
+            
             <div className="flex flex-col items-center justify-center mb-6">
               <Button 
                 onClick={() => setShowApiInfo(!showApiInfo)}
                 variant="outline"
                 className="mb-2"
               >
-                {showApiInfo ? 'Hide' : 'Show'} API Connection Info
+                {showApiInfo ? 'Hide' : 'Show'} Detailed API Information
               </Button>
-              
-              <div className="text-sm text-muted-foreground">
-                {isLoading ? (
-                  "Loading data from Airtable..."
-                ) : isError ? (
-                  <span className="text-red-500">
-                    Error connecting to Airtable. Check the console for details.
-                  </span>
-                ) : places.length > 0 ? (
-                  `Successfully loaded ${places.length} places from Airtable`
-                ) : (
-                  "Using mock data (no records found in Airtable)"
-                )}
-              </div>
             </div>
             
             {showApiInfo && (
               <Card className="p-6 mb-8 max-w-md mx-auto">
-                <h3 className="text-lg font-medium mb-4">Airtable Connection Information</h3>
+                <h3 className="text-lg font-medium mb-4">Airtable Connection Details</h3>
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="apiKey">API Key</Label>
                     <Input
                       id="apiKey"
                       type="password"
-                      value={import.meta.env.VITE_AIRTABLE_API_KEY ? "[API KEY HIDDEN]" : "Not set in .env"}
+                      value={envApiKey ? "[API KEY HIDDEN]" : "Not set in .env"}
                       readOnly
                     />
                   </div>
@@ -277,7 +315,7 @@ const Test = () => {
                     <Label htmlFor="baseId">Base ID</Label>
                     <Input
                       id="baseId"
-                      value={import.meta.env.VITE_AIRTABLE_BASE_ID || "Not set in .env"}
+                      value={envBaseId || "Not set in .env"}
                       readOnly
                     />
                   </div>
@@ -286,7 +324,7 @@ const Test = () => {
                     <Label htmlFor="tableName">Table Name</Label>
                     <Input
                       id="tableName"
-                      value={import.meta.env.VITE_AIRTABLE_TABLE_NAME || "Not set in .env"}
+                      value={envTableName || "Not set in .env"}
                       readOnly
                     />
                   </div>
