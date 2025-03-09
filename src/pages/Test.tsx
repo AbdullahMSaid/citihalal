@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { CitySelect } from "@/components/CitySelect";
@@ -24,6 +25,7 @@ const fetchPlacesFromAirtable = async () => {
   }
 
   try {
+    console.log("Fetching from Airtable with:", { baseId, tableName });
     const response = await fetch(
       `https://api.airtable.com/v0/${baseId}/${tableName}`,
       {
@@ -35,10 +37,13 @@ const fetchPlacesFromAirtable = async () => {
     );
 
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`Airtable API error: ${response.status}`, errorText);
       throw new Error(`Airtable API error: ${response.status}`);
     }
 
     const data = await response.json();
+    console.log("Airtable response:", data);
     
     // Transform Airtable data to match our Place type
     return data.records.map((record: any) => {
@@ -163,33 +168,43 @@ const Test = () => {
   
   const { toast } = useToast();
 
-  // Check if Airtable credentials are set in env variables
-  const hasAirtableCredentials = !!(
-    import.meta.env.VITE_AIRTABLE_API_KEY && 
-    import.meta.env.VITE_AIRTABLE_BASE_ID && 
-    import.meta.env.VITE_AIRTABLE_TABLE_NAME
-  );
-
   // Fetch places from Airtable
   const { 
-    data: airtablePlaces = [], 
+    data: places = [], 
     isLoading, 
     isError, 
     error 
   } = useQuery({
     queryKey: ['airtablePlaces'],
     queryFn: fetchPlacesFromAirtable,
-    enabled: hasAirtableCredentials,
+    // Always enable the query, no need to conditionally enable it
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
-  // Use Airtable data if available, otherwise use mock data
-  const places = hasAirtableCredentials && !isError && airtablePlaces.length > 0 
-    ? airtablePlaces 
-    : mockPlaces;
+  // We'll use toast to show errors if Airtable fetch fails
+  if (isError && error) {
+    console.error("Error in useQuery:", error);
+    toast({
+      title: "Error fetching data",
+      description: "Could not load places from Airtable. Using mock data instead.",
+      variant: "destructive",
+    });
+  }
+
+  // Log to help with debugging
+  console.log("Environment variables:", {
+    apiKey: import.meta.env.VITE_AIRTABLE_API_KEY ? "Set (hidden)" : "Not set",
+    baseId: import.meta.env.VITE_AIRTABLE_BASE_ID,
+    tableName: import.meta.env.VITE_AIRTABLE_TABLE_NAME
+  });
+  
+  console.log("Query state:", { isLoading, isError, placesCount: places.length });
+
+  // If we have an error or no places from Airtable, use mock data
+  const displayPlaces = isError || places.length === 0 ? mockPlaces : places;
 
   // Filter places based on category, city, and search query
-  const filteredPlaces = places.filter((place) => {
+  const filteredPlaces = displayPlaces.filter((place) => {
     const matchesCategory = !selectedCategory || place.category === selectedCategory;
     const matchesCity = !selectedCity || place.city === selectedCity;
     const matchesSearch = !searchQuery || 
@@ -229,21 +244,19 @@ const Test = () => {
                 {showApiInfo ? 'Hide' : 'Show'} API Connection Info
               </Button>
               
-              {hasAirtableCredentials && (
-                <div className="text-sm text-muted-foreground">
-                  {isLoading ? (
-                    "Loading data from Airtable..."
-                  ) : isError ? (
-                    <span className="text-red-500">
-                      Error connecting to Airtable. Check your .env file.
-                    </span>
-                  ) : airtablePlaces.length > 0 ? (
-                    `Successfully loaded ${airtablePlaces.length} places from Airtable`
-                  ) : (
-                    "Using mock data (no records found in Airtable)"
-                  )}
-                </div>
-              )}
+              <div className="text-sm text-muted-foreground">
+                {isLoading ? (
+                  "Loading data from Airtable..."
+                ) : isError ? (
+                  <span className="text-red-500">
+                    Error connecting to Airtable. Check the console for details.
+                  </span>
+                ) : places.length > 0 ? (
+                  `Successfully loaded ${places.length} places from Airtable`
+                ) : (
+                  "Using mock data (no records found in Airtable)"
+                )}
+              </div>
             </div>
             
             {showApiInfo && (
@@ -255,7 +268,7 @@ const Test = () => {
                     <Input
                       id="apiKey"
                       type="password"
-                      value={import.meta.env.VITE_AIRTABLE_API_KEY || "Not set in .env"}
+                      value={import.meta.env.VITE_AIRTABLE_API_KEY ? "[API KEY HIDDEN]" : "Not set in .env"}
                       readOnly
                     />
                   </div>
