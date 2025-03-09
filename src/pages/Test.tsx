@@ -14,10 +14,10 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 
 const fetchPlacesFromAirtable = async () => {
-  // Get Airtable credentials from localStorage
-  const apiKey = localStorage.getItem('AIRTABLE_API_KEY');
-  const baseId = localStorage.getItem('AIRTABLE_BASE_ID');
-  const tableName = localStorage.getItem('AIRTABLE_TABLE_NAME');
+  // Get Airtable credentials from env or localStorage fallback
+  const apiKey = import.meta.env.VITE_AIRTABLE_API_KEY || localStorage.getItem('AIRTABLE_API_KEY');
+  const baseId = import.meta.env.VITE_AIRTABLE_BASE_ID || localStorage.getItem('AIRTABLE_BASE_ID');
+  const tableName = import.meta.env.VITE_AIRTABLE_TABLE_NAME || localStorage.getItem('AIRTABLE_TABLE_NAME');
 
   if (!apiKey || !baseId || !tableName) {
     console.error("Airtable credentials missing");
@@ -159,19 +159,25 @@ const Test = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
   
-  // Airtable settings state
+  // Airtable settings state - now using env variables with localStorage fallback
   const [showSettings, setShowSettings] = useState(false);
-  const [apiKey, setApiKey] = useState(localStorage.getItem('AIRTABLE_API_KEY') || "");
-  const [baseId, setBaseId] = useState(localStorage.getItem('AIRTABLE_BASE_ID') || "");
-  const [tableName, setTableName] = useState(localStorage.getItem('AIRTABLE_TABLE_NAME') || "");
+  const [apiKey, setApiKey] = useState(
+    import.meta.env.VITE_AIRTABLE_API_KEY || localStorage.getItem('AIRTABLE_API_KEY') || ""
+  );
+  const [baseId, setBaseId] = useState(
+    import.meta.env.VITE_AIRTABLE_BASE_ID || localStorage.getItem('AIRTABLE_BASE_ID') || ""
+  );
+  const [tableName, setTableName] = useState(
+    import.meta.env.VITE_AIRTABLE_TABLE_NAME || localStorage.getItem('AIRTABLE_TABLE_NAME') || ""
+  );
   
   const { toast } = useToast();
 
-  // Check if Airtable credentials are set
+  // Check if Airtable credentials are set (either in env or localStorage)
   const hasAirtableCredentials = !!(
-    localStorage.getItem('AIRTABLE_API_KEY') && 
-    localStorage.getItem('AIRTABLE_BASE_ID') && 
-    localStorage.getItem('AIRTABLE_TABLE_NAME')
+    (import.meta.env.VITE_AIRTABLE_API_KEY || localStorage.getItem('AIRTABLE_API_KEY')) && 
+    (import.meta.env.VITE_AIRTABLE_BASE_ID || localStorage.getItem('AIRTABLE_BASE_ID')) && 
+    (import.meta.env.VITE_AIRTABLE_TABLE_NAME || localStorage.getItem('AIRTABLE_TABLE_NAME'))
   );
 
   // Fetch places from Airtable
@@ -192,7 +198,7 @@ const Test = () => {
     ? airtablePlaces 
     : mockPlaces;
 
-  // Save Airtable settings
+  // Save Airtable settings (to localStorage as fallback)
   const saveSettings = () => {
     if (!apiKey || !baseId || !tableName) {
       toast({
@@ -203,6 +209,7 @@ const Test = () => {
       return;
     }
 
+    // Save to localStorage as fallback for env variables
     localStorage.setItem('AIRTABLE_API_KEY', apiKey);
     localStorage.setItem('AIRTABLE_BASE_ID', baseId);
     localStorage.setItem('AIRTABLE_TABLE_NAME', tableName);
@@ -313,6 +320,15 @@ const Test = () => {
                     <p className="text-xs text-muted-foreground">
                       Usually the name of your table (e.g., "Places")
                     </p>
+                  </div>
+                  
+                  <div className="text-xs text-muted-foreground mb-4">
+                    <p>Note: These settings will be saved in your browser. For production use, set environment variables:</p>
+                    <ul className="list-disc pl-5 mt-1">
+                      <li>VITE_AIRTABLE_API_KEY</li>
+                      <li>VITE_AIRTABLE_BASE_ID</li>
+                      <li>VITE_AIRTABLE_TABLE_NAME</li>
+                    </ul>
                   </div>
                   
                   <Button 
