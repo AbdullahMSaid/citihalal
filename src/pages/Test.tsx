@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { CitySelect } from "@/components/CitySelect";
@@ -14,13 +13,13 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 
 const fetchPlacesFromAirtable = async () => {
-  // Get Airtable credentials from env or localStorage fallback
-  const apiKey = import.meta.env.VITE_AIRTABLE_API_KEY || localStorage.getItem('AIRTABLE_API_KEY');
-  const baseId = import.meta.env.VITE_AIRTABLE_BASE_ID || localStorage.getItem('AIRTABLE_BASE_ID');
-  const tableName = import.meta.env.VITE_AIRTABLE_TABLE_NAME || localStorage.getItem('AIRTABLE_TABLE_NAME');
+  // Get Airtable credentials directly from env variables
+  const apiKey = import.meta.env.VITE_AIRTABLE_API_KEY;
+  const baseId = import.meta.env.VITE_AIRTABLE_BASE_ID;
+  const tableName = import.meta.env.VITE_AIRTABLE_TABLE_NAME;
 
   if (!apiKey || !baseId || !tableName) {
-    console.error("Airtable credentials missing");
+    console.error("Airtable credentials missing in environment variables");
     return [];
   }
 
@@ -159,25 +158,16 @@ const Test = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
   
-  // Airtable settings state - now using env variables with localStorage fallback
-  const [showSettings, setShowSettings] = useState(false);
-  const [apiKey, setApiKey] = useState(
-    import.meta.env.VITE_AIRTABLE_API_KEY || localStorage.getItem('AIRTABLE_API_KEY') || ""
-  );
-  const [baseId, setBaseId] = useState(
-    import.meta.env.VITE_AIRTABLE_BASE_ID || localStorage.getItem('AIRTABLE_BASE_ID') || ""
-  );
-  const [tableName, setTableName] = useState(
-    import.meta.env.VITE_AIRTABLE_TABLE_NAME || localStorage.getItem('AIRTABLE_TABLE_NAME') || ""
-  );
+  // This app uses env variables, no need to show settings in UI
+  const [showApiInfo, setShowApiInfo] = useState(false);
   
   const { toast } = useToast();
 
-  // Check if Airtable credentials are set (either in env or localStorage)
+  // Check if Airtable credentials are set in env variables
   const hasAirtableCredentials = !!(
-    (import.meta.env.VITE_AIRTABLE_API_KEY || localStorage.getItem('AIRTABLE_API_KEY')) && 
-    (import.meta.env.VITE_AIRTABLE_BASE_ID || localStorage.getItem('AIRTABLE_BASE_ID')) && 
-    (import.meta.env.VITE_AIRTABLE_TABLE_NAME || localStorage.getItem('AIRTABLE_TABLE_NAME'))
+    import.meta.env.VITE_AIRTABLE_API_KEY && 
+    import.meta.env.VITE_AIRTABLE_BASE_ID && 
+    import.meta.env.VITE_AIRTABLE_TABLE_NAME
   );
 
   // Fetch places from Airtable
@@ -197,31 +187,6 @@ const Test = () => {
   const places = hasAirtableCredentials && !isError && airtablePlaces.length > 0 
     ? airtablePlaces 
     : mockPlaces;
-
-  // Save Airtable settings (to localStorage as fallback)
-  const saveSettings = () => {
-    if (!apiKey || !baseId || !tableName) {
-      toast({
-        title: "Error",
-        description: "Please fill in all fields",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    // Save to localStorage as fallback for env variables
-    localStorage.setItem('AIRTABLE_API_KEY', apiKey);
-    localStorage.setItem('AIRTABLE_BASE_ID', baseId);
-    localStorage.setItem('AIRTABLE_TABLE_NAME', tableName);
-    
-    toast({
-      title: "Success",
-      description: "Airtable settings saved. Refreshing data...",
-    });
-    
-    setShowSettings(false);
-    window.location.reload(); // Reload to apply new settings
-  };
 
   // Filter places based on category, city, and search query
   const filteredPlaces = places.filter((place) => {
@@ -257,11 +222,11 @@ const Test = () => {
             
             <div className="flex flex-col items-center justify-center mb-6">
               <Button 
-                onClick={() => setShowSettings(!showSettings)}
+                onClick={() => setShowApiInfo(!showApiInfo)}
                 variant="outline"
                 className="mb-2"
               >
-                {showSettings ? 'Hide' : 'Configure'} Airtable Connection
+                {showApiInfo ? 'Hide' : 'Show'} API Connection Info
               </Button>
               
               {hasAirtableCredentials && (
@@ -270,7 +235,7 @@ const Test = () => {
                     "Loading data from Airtable..."
                   ) : isError ? (
                     <span className="text-red-500">
-                      Error connecting to Airtable. Check settings.
+                      Error connecting to Airtable. Check your .env file.
                     </span>
                   ) : airtablePlaces.length > 0 ? (
                     `Successfully loaded ${airtablePlaces.length} places from Airtable`
@@ -281,18 +246,17 @@ const Test = () => {
               )}
             </div>
             
-            {showSettings && (
+            {showApiInfo && (
               <Card className="p-6 mb-8 max-w-md mx-auto">
-                <h3 className="text-lg font-medium mb-4">Airtable Connection Settings</h3>
+                <h3 className="text-lg font-medium mb-4">Airtable Connection Information</h3>
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="apiKey">API Key</Label>
                     <Input
                       id="apiKey"
                       type="password"
-                      placeholder="Enter Airtable API Key"
-                      value={apiKey}
-                      onChange={(e) => setApiKey(e.target.value)}
+                      value={import.meta.env.VITE_AIRTABLE_API_KEY || "Not set in .env"}
+                      readOnly
                     />
                   </div>
                   
@@ -300,43 +264,23 @@ const Test = () => {
                     <Label htmlFor="baseId">Base ID</Label>
                     <Input
                       id="baseId"
-                      placeholder="Enter Airtable Base ID"
-                      value={baseId}
-                      onChange={(e) => setBaseId(e.target.value)}
+                      value={import.meta.env.VITE_AIRTABLE_BASE_ID || "Not set in .env"}
+                      readOnly
                     />
-                    <p className="text-xs text-muted-foreground">
-                      Found in your Airtable URL: airtable.com/{baseId ? baseId : 'appXXXXXXXXXXXXXX'}
-                    </p>
                   </div>
                   
                   <div className="space-y-2">
                     <Label htmlFor="tableName">Table Name</Label>
                     <Input
                       id="tableName"
-                      placeholder="Enter Airtable Table Name"
-                      value={tableName}
-                      onChange={(e) => setTableName(e.target.value)}
+                      value={import.meta.env.VITE_AIRTABLE_TABLE_NAME || "Not set in .env"}
+                      readOnly
                     />
-                    <p className="text-xs text-muted-foreground">
-                      Usually the name of your table (e.g., "Places")
-                    </p>
                   </div>
                   
                   <div className="text-xs text-muted-foreground mb-4">
-                    <p>Note: These settings will be saved in your browser. For production use, set environment variables:</p>
-                    <ul className="list-disc pl-5 mt-1">
-                      <li>VITE_AIRTABLE_API_KEY</li>
-                      <li>VITE_AIRTABLE_BASE_ID</li>
-                      <li>VITE_AIRTABLE_TABLE_NAME</li>
-                    </ul>
+                    <p>These values are set in your .env file. To modify them, edit your .env file and restart the application.</p>
                   </div>
-                  
-                  <Button 
-                    onClick={saveSettings}
-                    className="w-full"
-                  >
-                    Save Settings
-                  </Button>
                 </div>
               </Card>
             )}
