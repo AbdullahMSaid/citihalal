@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { CitySelect } from "@/components/CitySelect";
@@ -18,6 +17,12 @@ const fetchPlacesFromAirtable = async () => {
   const apiKey = import.meta.env.VITE_AIRTABLE_API_KEY;
   const baseId = import.meta.env.VITE_AIRTABLE_BASE_ID;
   const tableName = import.meta.env.VITE_AIRTABLE_TABLE_NAME;
+
+  console.log("ENV Variables:", {
+    apiKey: apiKey ? "Set (masked for security)" : "Not set",
+    baseId,
+    tableName
+  });
 
   if (!apiKey || !baseId || !tableName) {
     console.error("Airtable credentials missing in environment variables");
@@ -168,10 +173,17 @@ const Test = () => {
   
   const { toast } = useToast();
 
-  // Get environment variables for display
+  // Get environment variables for display - read directly from import.meta.env
   const envApiKey = import.meta.env.VITE_AIRTABLE_API_KEY;
   const envBaseId = import.meta.env.VITE_AIRTABLE_BASE_ID;
   const envTableName = import.meta.env.VITE_AIRTABLE_TABLE_NAME;
+
+  // Log the environment variables to help with debugging
+  console.log("Direct access to env variables:", {
+    apiKey: envApiKey ? "Set (masked for security)" : "Not set",
+    baseId: envBaseId,
+    tableName: envTableName
+  });
 
   // Fetch places from Airtable
   const { 
@@ -197,7 +209,7 @@ const Test = () => {
 
   // Log to help with debugging
   console.log("Environment variables:", {
-    apiKey: envApiKey ? "Set (hidden)" : "Not set",
+    apiKey: envApiKey ? "Set (masked for security)" : "Not set",
     baseId: envBaseId,
     tableName: envTableName
   });
@@ -392,3 +404,4 @@ const Test = () => {
 };
 
 export default Test;
+

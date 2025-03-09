@@ -20,9 +20,8 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  // Define a default .env file that can be overridden
+  // Define the environment variables explicitly
   define: {
-    // Make sure to stringify values
     'import.meta.env.VITE_AIRTABLE_API_KEY': JSON.stringify(process.env.VITE_AIRTABLE_API_KEY || ''),
     'import.meta.env.VITE_AIRTABLE_BASE_ID': JSON.stringify(process.env.VITE_AIRTABLE_BASE_ID || ''),
     'import.meta.env.VITE_AIRTABLE_TABLE_NAME': JSON.stringify(process.env.VITE_AIRTABLE_TABLE_NAME || ''),
