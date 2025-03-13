@@ -1,4 +1,5 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { CitySelect } from "@/components/CitySelect";
 import { PlaceCard } from "@/components/PlaceCard";
@@ -12,16 +13,28 @@ import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 
-const fetchPlacesFromAirtable = async () => {
-  // Get Airtable credentials directly from env variables
-  const apiKey = import.meta.env.VITE_AIRTABLE_API_KEY;
-  const baseId = import.meta.env.VITE_AIRTABLE_BASE_ID;
-  const tableName = import.meta.env.VITE_AIRTABLE_TABLE_NAME;
+// Define environment variables at the top level
+const API_KEY = import.meta.env.VITE_AIRTABLE_API_KEY;
+const BASE_ID = import.meta.env.VITE_AIRTABLE_BASE_ID;
+const TABLE_NAME = import.meta.env.VITE_AIRTABLE_TABLE_NAME;
 
-  console.log("ENV Variables:", {
+// Log environment variables immediately to check if they're loaded
+console.log("Environment variables on load:", {
+  apiKey: API_KEY ? "Set (masked)" : "Not set",
+  baseId: BASE_ID || "Not set",
+  tableName: TABLE_NAME || "Not set"
+});
+
+const fetchPlacesFromAirtable = async () => {
+  // Use the variables defined at the top level
+  const apiKey = API_KEY;
+  const baseId = BASE_ID;
+  const tableName = TABLE_NAME;
+  
+  console.log("ENV Variables in fetch function:", {
     apiKey: apiKey ? "Set (masked for security)" : "Not set",
-    baseId,
-    tableName
+    baseId: baseId || "Not set",
+    tableName: tableName || "Not set"
   });
 
   if (!apiKey || !baseId || !tableName) {
@@ -167,23 +180,29 @@ const Test = () => {
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
-  
-  // Always show API info by default so the user can verify the configuration
   const [showApiInfo, setShowApiInfo] = useState(true);
-  
   const { toast } = useToast();
 
-  // Get environment variables for display - read directly from import.meta.env
-  const envApiKey = import.meta.env.VITE_AIRTABLE_API_KEY;
-  const envBaseId = import.meta.env.VITE_AIRTABLE_BASE_ID;
-  const envTableName = import.meta.env.VITE_AIRTABLE_TABLE_NAME;
+  // Use the variables from the top level
+  const envApiKey = API_KEY;
+  const envBaseId = BASE_ID;
+  const envTableName = TABLE_NAME;
 
-  // Log the environment variables to help with debugging
-  console.log("Direct access to env variables:", {
-    apiKey: envApiKey ? "Set (masked for security)" : "Not set",
-    baseId: envBaseId,
-    tableName: envTableName
-  });
+  // Add an effect to check environment variables after component mounts
+  useEffect(() => {
+    console.log("Component mounted, environment variables:", {
+      apiKey: envApiKey ? "Set (masked for security)" : "Not set",
+      baseId: envBaseId || "Not set",
+      tableName: envTableName || "Not set"
+    });
+    
+    // Check if Vite is properly replacing the env variables
+    console.log("Raw env variable check:", {
+      apiKey: typeof import.meta.env.VITE_AIRTABLE_API_KEY,
+      baseId: typeof import.meta.env.VITE_AIRTABLE_BASE_ID,
+      tableName: typeof import.meta.env.VITE_AIRTABLE_TABLE_NAME
+    });
+  }, []);
 
   // Fetch places from Airtable
   const { 
@@ -208,12 +227,6 @@ const Test = () => {
   }
 
   // Log to help with debugging
-  console.log("Environment variables:", {
-    apiKey: envApiKey ? "Set (masked for security)" : "Not set",
-    baseId: envBaseId,
-    tableName: envTableName
-  });
-  
   console.log("Query state:", { isLoading, isError, placesCount: places.length });
 
   // If we have an error or no places from Airtable, use mock data
@@ -404,4 +417,3 @@ const Test = () => {
 };
 
 export default Test;
-
