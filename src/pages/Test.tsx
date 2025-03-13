@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { CategoryFilter } from "@/components/CategoryFilter";
 import { CitySelect } from "@/components/CitySelect";
@@ -8,9 +7,6 @@ import { Category, Place } from "@/types/place";
 import { Input } from "@/components/ui/input";
 import { Header } from "@/components/Header";
 import { useQuery } from "@tanstack/react-query";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 
 // Define environment variables at the top level
@@ -180,7 +176,6 @@ const Test = () => {
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
-  const [showApiInfo, setShowApiInfo] = useState(true);
   const { toast } = useToast();
 
   // Use the variables from the top level
@@ -263,103 +258,6 @@ const Test = () => {
             <p className="text-muted-foreground mb-6">
               Find the best Halal places to shop, eat, and drink in your area - Test Version
             </p>
-            
-            {/* API Connection Status Banner */}
-            <Card className="p-6 mb-8 mx-auto max-w-3xl bg-muted/30 border-muted">
-              <h3 className="text-lg font-medium mb-4">Airtable Configuration from .env File</h3>
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
-                <div className="space-y-2">
-                  <Label className="font-bold">API Key:</Label>
-                  <div className="text-sm break-all bg-background p-2 rounded">
-                    {envApiKey ? 
-                      (envApiKey.substring(0, 10) + "..." + envApiKey.substring(envApiKey.length - 10)) : 
-                      "Not set in .env"}
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label className="font-bold">Base ID:</Label>
-                  <div className="text-sm break-all bg-background p-2 rounded">
-                    {envBaseId || "Not set in .env"}
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label className="font-bold">Table Name:</Label>
-                  <div className="text-sm break-all bg-background p-2 rounded">
-                    {envTableName || "Not set in .env"}
-                  </div>
-                </div>
-              </div>
-              
-              <div className="mt-4 text-sm text-muted-foreground">
-                {isLoading ? (
-                  "Loading data from Airtable..."
-                ) : isError ? (
-                  <span className="text-red-500">
-                    Error connecting to Airtable. Check the console for detailed error message.
-                  </span>
-                ) : places.length > 0 ? (
-                  <span className="text-green-600 font-medium">
-                    Successfully loaded {places.length} places from Airtable
-                  </span>
-                ) : (
-                  <span className="text-amber-600">
-                    No records found in Airtable table. Using mock data instead.
-                  </span>
-                )}
-              </div>
-            </Card>
-            
-            <div className="flex flex-col items-center justify-center mb-6">
-              <Button 
-                onClick={() => setShowApiInfo(!showApiInfo)}
-                variant="outline"
-                className="mb-2"
-              >
-                {showApiInfo ? 'Hide' : 'Show'} Detailed API Information
-              </Button>
-            </div>
-            
-            {showApiInfo && (
-              <Card className="p-6 mb-8 max-w-md mx-auto">
-                <h3 className="text-lg font-medium mb-4">Airtable Connection Details</h3>
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="apiKey">API Key</Label>
-                    <Input
-                      id="apiKey"
-                      type="password"
-                      value={envApiKey ? "[API KEY HIDDEN]" : "Not set in .env"}
-                      readOnly
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="baseId">Base ID</Label>
-                    <Input
-                      id="baseId"
-                      value={envBaseId || "Not set in .env"}
-                      readOnly
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="tableName">Table Name</Label>
-                    <Input
-                      id="tableName"
-                      value={envTableName || "Not set in .env"}
-                      readOnly
-                    />
-                  </div>
-                  
-                  <div className="text-xs text-muted-foreground mb-4">
-                    <p>These values are set in your .env file. To modify them, edit your .env file and restart the application.</p>
-                  </div>
-                </div>
-              </Card>
-            )}
           </div>
 
           <div className="flex flex-col gap-6">
