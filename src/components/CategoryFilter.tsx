@@ -1,7 +1,7 @@
 
 import { Category } from "@/types/place";
 import { cn } from "@/lib/utils";
-import { ShoppingBag, Utensils, Coffee, LucideIcon, Mosque } from "lucide-react";
+import { ShoppingBag, Utensils, Coffee, LucideIcon, Church } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface CategoryFilterProps {
@@ -13,7 +13,7 @@ const categories: { value: Category; label: string; icon: LucideIcon }[] = [
   { value: "shop", label: "Shopping", icon: ShoppingBag },
   { value: "food", label: "Restaurants", icon: Utensils },
   { value: "coffee", label: "Cafés", icon: Coffee },
-  { value: "masjid", label: "Masjid", icon: Mosque },
+  { value: "masjid", label: "Masjid", icon: Church },
 ];
 
 export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryFilterProps) {
@@ -43,7 +43,7 @@ export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryF
           title={label}
         >
           <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
-          {!isMobile && <span className="text-sm sm:text-base">{value}</span>}
+          {!isMobile && <span className="text-sm sm:text-base">{label}</span>}
         </button>
       ))}
     </div>
