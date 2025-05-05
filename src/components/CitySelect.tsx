@@ -1,3 +1,4 @@
+
 import {
   Select,
   SelectContent,
@@ -8,7 +9,7 @@ import {
 
 interface CitySelectProps {
   selectedCity: string | null;
-  onSelectCity: (city: string) => void;
+  onSelectCity: (city: string | null) => void;
 }
 
 const cities = [
@@ -21,8 +22,21 @@ const cities = [
 ];
 
 export function CitySelect({ selectedCity, onSelectCity }: CitySelectProps) {
+  const handleValueChange = (value: string) => {
+    // If the user selects the already selected city, deselect it
+    if (value === selectedCity) {
+      onSelectCity(null);
+    } else {
+      onSelectCity(value);
+    }
+  };
+
   return (
-    <Select onValueChange={onSelectCity} value={selectedCity || undefined}>
+    <Select 
+      onValueChange={handleValueChange} 
+      value={selectedCity || undefined}
+      defaultValue={undefined}
+    >
       <SelectTrigger className="w-full bg-white/50 backdrop-blur-sm">
         <SelectValue placeholder="City" />
       </SelectTrigger>
