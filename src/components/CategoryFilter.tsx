@@ -1,7 +1,7 @@
 
 import { Category } from "@/types/place";
 import { cn } from "@/lib/utils";
-import { ShoppingBag, Utensils, Coffee, LucideIcon, Church } from "lucide-react";
+import { ShoppingBag, Utensils, Coffee, LucideIcon, Home } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface CategoryFilterProps {
@@ -13,7 +13,7 @@ const categories: { value: Category; label: string; icon: LucideIcon }[] = [
   { value: "shop", label: "Shopping", icon: ShoppingBag },
   { value: "food", label: "Restaurants", icon: Utensils },
   { value: "coffee", label: "Cafés", icon: Coffee },
-  { value: "masjid", label: "Masjid", icon: Church }, // We'll keep using Church but style it differently
+  { value: "masjid", label: "Masjid", icon: Home },
 ];
 
 export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryFilterProps) {
@@ -25,19 +25,6 @@ export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryF
     } else {
       onSelectCategory(category);
     }
-  };
-
-  // Custom render for the mosque icon to make it look more like a mosque/dome
-  const renderIcon = (value: Category, Icon: LucideIcon) => {
-    if (value === "masjid") {
-      return (
-        <div className="relative">
-          <Icon className="w-4 h-4 sm:w-5 sm:h-5 transform rotate-180" />
-          <div className="absolute w-2 h-1 bg-current rounded-t-full top-3 left-1/2 transform -translate-x-1/2 -translate-y-1"></div>
-        </div>
-      );
-    }
-    return <Icon className="w-4 h-4 sm:w-5 sm:h-5" />;
   };
 
   return (
@@ -55,7 +42,7 @@ export function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryF
           )}
           title={label}
         >
-          {renderIcon(value, Icon)}
+          <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
           {!isMobile && <span className="text-sm sm:text-base">{label}</span>}
         </button>
       ))}
