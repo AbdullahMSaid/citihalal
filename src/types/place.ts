@@ -1,4 +1,5 @@
-export type Category = "shop" | "food" | "coffee";
+
+export type Category = "shop" | "food" | "coffee" | "masjid";
 
 export interface Place {
   id: string;

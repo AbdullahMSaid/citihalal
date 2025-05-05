@@ -12,6 +12,9 @@ export function Header() {
             </Link>
           </div>
           <nav className="flex items-center gap-6">
+            <Link to="/home" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              Home
+            </Link>
             <Link to="/about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
               About
             </Link>
@@ -20,9 +23,6 @@ export function Header() {
             </Link>
             <Link to="/contact" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
               Contact
-            </Link>
-            <Link to="/test" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              Test
             </Link>
           </nav>
         </div>
